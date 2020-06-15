@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nodemanager-daemonset
+  labels:
+    app: nodemanager
+spec:
+  selector:
+    matchLabels:
+      app: nodemanager
+  template:
+    metadata:
+      labels:
+        app: nodemanager
+    spec:
+      containers:
+      - name: nodemanager
+        image: nodemanager:latest
+        imagePullPolicy: Never
+        volumeMounts:
+          - name: config-volume
+            mountPath: "/hadoop/etc/hadoop/yarn-site.xml"
+            subPath: yarn-site.xml
+      nodeSelector:
+        role: worker
+      hostNetwork: true
+      volumes:
+      - name: config-volume
+        configMap:
+          name: yarn-config

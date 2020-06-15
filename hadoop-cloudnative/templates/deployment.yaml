@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resourcemanager-deployment
+  labels:
+    app: resourcemanager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: resourcemanager
+  template:
+    metadata:
+      labels:
+        app: resourcemanager
+    spec:
+      containers:
+      - name: resourcemanager
+        image: resourcemanager:latest
+        imagePullPolicy: Never
+        volumeMounts:
+          - name: config-volume
+            mountPath: "/hadoop/etc/hadoop/yarn-site.xml"
+            subPath: yarn-site.xml
+      nodeSelector:
+        role: master
+      hostNetwork: true
+      volumes:
+      - name: config-volume
+        configMap:
+          name: yarn-config

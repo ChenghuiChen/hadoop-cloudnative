@@ -1,0 +1,1 @@
+A simpe practice for hadoop on Kubernetes.
